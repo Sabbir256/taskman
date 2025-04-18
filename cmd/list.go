@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var statusFilter string
+
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
@@ -52,6 +54,10 @@ var listCmd = &cobra.Command{
 			if i == 0 {
 				continue
 			}
+
+			if statusFilter != "" && row[2] != statusFilter {
+				continue
+			}
 			table.Append(row)
 		}
 
@@ -61,4 +67,6 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+
+	listCmd.Flags().StringVar(&statusFilter, "status", "", "Filter todos by status (Pending/Completed)")
 }
