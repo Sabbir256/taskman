@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
@@ -37,31 +38,35 @@ var listCmd = &cobra.Command{
 			return
 		}
 
-		if len(records) <= 1 {
+		if len(records) == 0 {
 			fmt.Println("No todos found.")
 			return
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)
-		table.SetHeader([]string{"ID", "Description", "Status"})
+		// table.SetHeader([]string{"Id", "Status"})
 		table.SetBorder(false)
 		table.SetHeaderLine(false)
 		table.SetRowLine(false)
 		table.SetColumnSeparator("")
 		table.SetAutoWrapText(false)
 
-		for i, row := range records {
-			if i == 0 {
-				continue
+		for _, row := range records {
+			id, status, deadline, desc := row[0], row[1], row[2], row[3]
+
+			if status == "pending" || status == "" {
+				status = "[ ]"
+			} else if status == "done" {
+				status = "[✔]"
 			}
 
-			if statusFilter != "" && row[2] != statusFilter {
-				continue
-			}
-			table.Append(row)
+			humanDeadline := humanizeDeadline(deadline)
+			table.Append([]string{id, status, humanDeadline, desc})
 		}
 
+		fmt.Println()
 		table.Render()
+		fmt.Println()
 	},
 }
 
@@ -69,4 +74,29 @@ func init() {
 	rootCmd.AddCommand(listCmd)
 
 	listCmd.Flags().StringVar(&statusFilter, "status", "", "Filter todos by status (Pending/Completed)")
+}
+
+func humanizeDeadline(deadline string) string {
+	if deadline == "" {
+		return "No deadline"
+	}
+
+	parsed, err := time.Parse("2006-01-02", deadline)
+	if err != nil {
+		return deadline
+	}
+
+	today := time.Now().Truncate(24 * time.Hour)
+	diff := parsed.Sub(today).Hours() / 24
+
+	switch diff {
+		case 0:
+			return "today"
+		case 1:
+			return "tomorrow"
+		case -1:
+			return "yesterday"
+		default:
+			return parsed.Format("Mon Jan 2")
+	}
 }
