@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var description string
+var deadline string
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
@@ -17,10 +17,11 @@ var addCmd = &cobra.Command{
 	Short: "Add a new todo item",
 	Long: `The add command takes a description of the todo item and adds it to the list.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if description == "" {
+		if len(args) < 1 {
 			fmt.Println("Please provide a description for the task.")
 			return
 		}
+		description := args[0]
 
 		const fileName = "todos.csv"
 		var nextID int = 1
@@ -39,7 +40,7 @@ var addCmd = &cobra.Command{
 		reader := csv.NewReader(file)
 		records, _ := reader.ReadAll()
 
-		if !newFile && len(records) > 1 {
+		if !newFile && len(records) > 0 {
 			lastRecord := records[len(records)-1]
 			lastID, err := strconv.Atoi(lastRecord[0])
 			if err == nil {
@@ -50,15 +51,11 @@ var addCmd = &cobra.Command{
 		writer := csv.NewWriter(file)
 		defer writer.Flush()
 
-		// write header if new file
-		if newFile {
-			writer.Write([]string{"ID", "Description", "Status"})
-		}
-
 		record := []string{
 			strconv.Itoa(nextID),
+			"pending",
+			deadline,
 			description,
-			"Pending",
 		}
 
 		if err := writer.Write(record); err != nil {
@@ -66,13 +63,12 @@ var addCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Printf("Todo item added ID: %d, Description: %s\n", nextID, description)
+		fmt.Println("✅ Successfully added a new todo item!")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
 
-	addCmd.Flags().StringVarP(&description, "desc", "d", "", "Description of the todo item")
-	addCmd.MarkFlagRequired("desc")
+	addCmd.Flags().StringVar(&deadline, "deadline", "", "Deadline for the todo (e.g., 2025-04-11)")
 }
