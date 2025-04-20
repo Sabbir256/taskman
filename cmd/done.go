@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var undo bool
+
 // doneCmd represents the done command
 var doneCmd = &cobra.Command{
 	Use:   "done",
@@ -39,14 +41,20 @@ This will update the status of the task in the todo list.`,
 		updated := false
 		for i, row := range rows {
 			if row[0] == idToMark {
-				rows[i][1] = "done"
+				if undo {
+					rows[i][1] = "pending"
+					fmt.Printf("↩️ Unmarked task %s as not done.\n", idToMark)
+				} else {
+					rows[i][1] = "done"
+					fmt.Printf("✅ Marked task %s as done!\n", idToMark)
+				}
 				updated = true
 				break
 			}
 		}
 
 		if !updated {
-			fmt.Printf("Task with ID %v not found\n", idToMark)
+			fmt.Println("⚠️ Task ID not found!")
 			return
 		}
 
@@ -60,11 +68,11 @@ This will update the status of the task in the todo list.`,
 			fmt.Println("Error writing to CSV:", err)
 			return
 		}
-
-		fmt.Printf("✅ Marked task %s as done\n", idToMark)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(doneCmd)
+
+	doneCmd.Flags().BoolVar(&undo, "undo", false, "Unmark task as done")
 }
