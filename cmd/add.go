@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/Sabbir256/taskman/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +24,7 @@ var addCmd = &cobra.Command{
 		}
 		description := args[0]
 
-		const fileName = "todos.csv"
+		fileName := utils.GetTodoFilePath()
 		var nextID int = 1
 
 		// check if the file exists

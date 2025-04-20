@@ -7,6 +7,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/Sabbir256/taskman/utils"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 )
@@ -22,7 +23,7 @@ var ListCmd = &cobra.Command{
 	Short: "List all tasks",
 	Long: `Displays all the tasks in the list with their ID and status.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		const fileName = "todos.csv"
+		fileName := utils.GetTodoFilePath()
 
 		file, err := os.Open(fileName)
 		if err != nil {

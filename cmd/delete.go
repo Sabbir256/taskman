@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Sabbir256/taskman/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -21,7 +22,8 @@ var deleteCmd = &cobra.Command{
 
 		idToDelete := args[0]
 
-		file, err := os.OpenFile("todos.csv", os.O_RDWR, 0644)
+		fileName := utils.GetTodoFilePath()
+		file, err := os.OpenFile(fileName, os.O_RDWR, 0644)
 		if err != nil {
 			fmt.Println("Error opening file:", err)
 			return
