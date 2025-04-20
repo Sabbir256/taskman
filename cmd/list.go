@@ -17,7 +17,7 @@ type groupInfo struct {
 }
 
 // listCmd represents the list command
-var listCmd = &cobra.Command{
+var ListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all tasks",
 	Long: `Displays all the tasks in the list with their ID and status.`,
@@ -76,7 +76,7 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(ListCmd)
 }
 
 func getStatusIcon(status string) string {

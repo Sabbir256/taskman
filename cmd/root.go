@@ -11,6 +11,10 @@ var rootCmd = &cobra.Command{
 	Use:   "taskman",
 	Short: "A simple and powerful CLI task manager",
 	Long: `Manage your tasks from command line with ease.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		// Default command to list tasks
+		ListCmd.Run(cmd, args)
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
