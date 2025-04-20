@@ -15,7 +15,7 @@ var doneCmd = &cobra.Command{
 	Use:   "done",
 	Short: "Mark a task as done",
 	Long: `The done command takes an ID as input and marks the corresponding task as done.
-This will update the status of the task in the todo list.`,
+This will update the status of the task in the list.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Please provide the ID of the task to mark as done")

@@ -14,8 +14,8 @@ var deadline string
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Add a new todo item",
-	Long: `The add command takes a description of the todo item and adds it to the list.`,
+	Short: "Add a new task",
+	Long: `The add command takes a description of the task and adds it to the list.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Please provide a description for the task.")
@@ -63,12 +63,12 @@ var addCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("✅ Successfully added a new todo item!")
+		fmt.Println("✅ Successfully added a new task!")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
 
-	addCmd.Flags().StringVar(&deadline, "deadline", "", "Deadline for the todo (e.g., 2025-04-11)")
+	addCmd.Flags().StringVar(&deadline, "deadline", "", "Deadline for the task (e.g., 2025-04-11)")
 }

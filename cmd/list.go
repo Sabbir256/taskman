@@ -19,15 +19,15 @@ type groupInfo struct {
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all todos",
-	Long: `Displays all the todos in the list with their ID and status.`,
+	Short: "List all tasks",
+	Long: `Displays all the tasks in the list with their ID and status.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		const fileName = "todos.csv"
 
 		file, err := os.Open(fileName)
 		if err != nil {
 			if os.IsNotExist(err) {
-				fmt.Println("No todos found.")
+				fmt.Println("📋 No tasks found!")
 				return
 			}
 			fmt.Println("Error opening file:", err)
@@ -43,7 +43,7 @@ var listCmd = &cobra.Command{
 		}
 
 		if len(records) == 0 {
-			fmt.Println("No todos found.")
+			fmt.Println("📋 No tasks found!")
 			return
 		}
 
