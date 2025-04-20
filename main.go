@@ -1,6 +1,6 @@
 package main
 
-import "github.com/Sabbir256/tasks/cmd"
+import "github.com/Sabbir256/taskman/cmd"
 
 func main() {
 	cmd.Execute()
